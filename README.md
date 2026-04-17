@@ -1,69 +1,89 @@
-# CodeIgniter 4 Application Starter
+# White Sand Resort Website (CodeIgniter 4)
 
-## What is CodeIgniter?
+Single-resort website with:
 
-CodeIgniter is a PHP full-stack web framework that is light, fast, flexible and secure.
-More information can be found at the [official site](https://codeigniter.com).
+- Public home page and gallery
+- Public inquiry form with database persistence and admin email notification
+- Admin login with role field support
+- Admin gallery management (upload, edit, delete)
+- Admin inquiry management (view and status updates)
+- Responsive dark luxury theme
 
-This repository holds a composer-installable app starter.
-It has been built from the
-[development repository](https://github.com/codeigniter4/CodeIgniter4).
+## Tech Stack
 
-More information about the plans for version 4 can be found in [CodeIgniter 4](https://forum.codeigniter.com/forumdisplay.php?fid=28) on the forums.
+- CodeIgniter 4
+- MySQL
+- Vanilla HTML/CSS + minimal JavaScript
 
-You can read the [user guide](https://codeigniter.com/user_guide/)
-corresponding to the latest version of the framework.
+## Theme Palette
 
-## Installation & updates
+- Main background: #0A1A2F
+- Card background: #121E2E
+- Accent: #1F6AE1
 
-`composer create-project codeigniter4/appstarter` then `composer update` whenever
-there is a new release of the framework.
+## Configuration
 
-When updating, check the release notes to see if there are any changes you might need to apply
-to your `app` folder. The affected files can be copied or merged from
-`vendor/codeigniter4/framework/app`.
+Environment settings are in [.env](.env).
 
-## Setup
+Important values to update for your machine:
 
-Copy `env` to `.env` and tailor for your app, specifically the baseURL
-and any database settings.
+1. Database host, name, username, password
+2. SMTP settings for inquiry notification
+3. Base URL if not using http://localhost:8080/
 
-## Important Change with index.php
+## Database Setup
 
-`index.php` is no longer in the root of the project! It has been moved inside the *public* folder,
-for better security and separation of components.
+Create a database named white_sand_resort, then run:
 
-This means that you should configure your web server to "point" to your project's *public* folder, and
-not to the project root. A better practice would be to configure a virtual host to point there. A poor practice would be to point your web server to the project root and expect to enter *public/...*, as the rest of your logic and the
-framework are exposed.
+1. php spark migrate
+2. php spark db:seed AdminUserSeeder
 
-**Please** read the user guide for a better explanation of how CI4 works!
+Seeded admin account:
 
-## Repository Management
+- Email: admin@whitesandresort.local
+- Password: Admin@12345
 
-We use GitHub issues, in our main repository, to track **BUGS** and to track approved **DEVELOPMENT** work packages.
-We use our [forum](http://forum.codeigniter.com) to provide SUPPORT and to discuss
-FEATURE REQUESTS.
+Change this password immediately in production.
 
-This repository is a "distribution" one, built by our release preparation script.
-Problems with it can be raised on our forum, or as issues in the main repository.
+## Run Locally
 
-## Server Requirements
+1. Install dependencies:
+	composer install --no-dev
+2. Start server:
+	 php spark serve
+3. Open:
+	 http://localhost:8080/
 
-PHP version 8.2 or higher is required, with the following extensions installed:
+## Key Routes
 
-- [intl](http://php.net/manual/en/intl.requirements.php)
-- [mbstring](http://php.net/manual/en/mbstring.installation.php)
+- Public:
+	- /
+	- /gallery
+	- /inquiry
+- Admin:
+	- /admin/login
+	- /admin/dashboard
+	- /admin/gallery
+	- /admin/inquiries
 
-> [!WARNING]
-> - The end of life date for PHP 7.4 was November 28, 2022.
-> - The end of life date for PHP 8.0 was November 26, 2023.
-> - The end of life date for PHP 8.1 was December 31, 2025.
-> - If you are still using below PHP 8.2, you should upgrade immediately.
-> - The end of life date for PHP 8.2 will be December 31, 2026.
+## Project Structure
 
-Additionally, make sure that the following extensions are enabled in your PHP:
+- Controllers:
+	- Home
+	- Gallery
+	- Inquiry
+	- Admin
+- Models:
+	- GalleryModel
+	- InquiryModel
+	- AdminUserModel
+- Migrations:
+	- admin_users
+	- gallery_images
+	- inquiries
 
-- json (enabled by default - don't turn it off)
-- [mysqlnd](http://php.net/manual/en/mysqlnd.install.php) if you plan to use MySQL
-- [libcurl](http://php.net/manual/en/curl.requirements.php) if you plan to use the HTTP\CURLRequest library
+## Notes
+
+- Gallery files upload to public/uploads/gallery.
+- Inquiry emails use Config\Email and .env overrides.
+- Admin-protected routes use a custom filter alias: adminauth.
